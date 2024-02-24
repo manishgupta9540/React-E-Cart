@@ -1,0 +1,42 @@
+import React, { useEffect, useState } from 'react';
+import { items } from "./Data";
+import Product from "./Product";
+import { useParams } from 'react-router-dom';
+
+
+const ProductDetails = () => {
+
+    const {id} = useParams();
+    const [product, setProduct]=useState({});
+    const [relatedProduct, setRelatedProduct]=useState([]);
+
+    useEffect(()=>{
+        const filterProduct = items.filter((product)=>product.id == id)
+        setProduct(filterProduct[0]);
+
+        const relatedProduct = items.filter((suman)=>suman.category === product.category)
+        setRelatedProduct(relatedProduct);
+    },[id,product.category]);
+
+    return <>
+        <div className="container con">
+            <div className="img">
+                <img src={product.imgSrc} alt="" />
+            </div>
+            <div className="text-center">
+                <h1 className="card-title">{product.title}</h1>
+                <p className="card-text">{product.description}</p>
+                <button className="btn btn-primary mx-3">{product.price} ₹</button>
+                <button className="btn btn-warning">Add To Cart</button>
+            </div>
+        </div>
+
+        <h1 className="text-center">Related Products</h1>
+      <Product items={relatedProduct} />
+    </>
+
+
+}
+
+
+export default ProductDetails;
